@@ -1,8 +1,8 @@
 project('__cerrors', 'cpp',
-	version: '1.0.0',
+	version: '0.1.0',
 	default_options:[
 		'cpp_std=c++17',
-		'default_library=shared',
+		'default_library=both',
 		'buildtype=release'
 	])
 
@@ -13,6 +13,7 @@ cado_errors_lib = library('__cerrors',
 	],
     include_directories: include_directories('./include'),
     cpp_args: ['-DCADO_ERRORS_EXPORT'],
+    name_prefix: '',
     install: true,
 )
 

@@ -33,8 +33,6 @@
 *.la
 *.a
 *.lib
-
-# Executables
 *.exe
 *.out
 *.app
@@ -68,5 +66,9 @@ vcpkg_installed/
 Testing/
 .cache/
 
+.clangd
 
 builddir
+build
+build-static
+build-shared
