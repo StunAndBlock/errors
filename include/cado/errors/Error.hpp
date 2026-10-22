@@ -1,61 +1,46 @@
 #ifndef CADO_ERRORS_ERROR_HPP_
 #define CADO_ERRORS_ERROR_HPP_
 
+#include <cstddef>
+#include <memory>
 #include <string>
-#include "cado/errors/Export.hpp"
-
 namespace cado {
 namespace errors {
 
-class CADO_API Error {
+class IError {
 public:
-  Error();
-  Error(const Error &);  
-  Error(const std::string &);
-  ~Error();
-  Error& operator=(const Error &);
-  bool operator==(const Error &) const;
-  bool operator!=(const Error &) const;
-  const std::string& What() const;
-  bool Is() const;
-private:
-  class Pimpl {
-  public:
-    Pimpl(const std::string &, const Error *, bool);
-    Pimpl(const Pimpl&);  
-    std::string msg_;
-    bool is_;
-    const Error* errRef_;
-  };
-  Pimpl* pimpl_;
+  virtual ~IError() = default;
+  virtual std::string what() const = 0;
 };
 
-class CADO_API WError{
+class BaseError : public IError {
 public:
-  WError();
-  WError(const WError &);
-  WError(const std::wstring &);
-  ~WError();
-  WError& operator=(const WError &);
-  bool operator==(const WError &) const;
-  bool operator!=(const WError &) const;
-  const std::wstring& What() const;
-  bool Is() const;
-private:
-  class Pimpl {
-  public:
-    Pimpl(const std::wstring &, const WError *, bool);
-    Pimpl(const Pimpl&);  
-    std::wstring msg_;
-    bool is_;
-    const WError* errRef_;
-  };
-  Pimpl* pimpl_;
+  BaseError(const std::string &msg) : msg_(msg) {};
+  std::string what() const override {
+    return this->msg_;
+  }
+  ~BaseError() override = default;
+
+protected:
+  const std::string msg_;
 };
 
-}
-}
+using Error = std::shared_ptr<const IError>;
+constexpr std::nullptr_t null = nullptr;
+// bool Error::operator!=(const Error& other) const {
+//   return !(*this == other);
+// }
+// const std::string& Error::What() const {
+//   if (pimpl_->errRef_ == nullptr) {
+//     return pimpl_->msg_;
+//   }
+//   return pimpl_->errRef_->What();
+// }
+// bool Error::Is() const {
+//   return pimpl_->is_;
+// }
 
+} // namespace errors
+} // namespace cado
 
-#endif //!CADO_ERRORS_ERROR_HPP_
-
+#endif //! CADO_ERRORS_ERROR_HPP_

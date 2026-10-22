@@ -67,6 +67,8 @@ Testing/
 .cache/
 
 .clangd
+.clang-format
+subprojects
 
 builddir
 build
